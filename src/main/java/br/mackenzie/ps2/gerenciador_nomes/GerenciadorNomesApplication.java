@@ -22,11 +22,10 @@ public class GerenciadorNomesApplication implements CommandLineRunner {
 		try {
 			System.out.println("EXECUTING : command line runner");
 			String createTable = "CREATE TABLE IF NOT EXISTS countries(id INT, name VARCHAR(256),PRIMARY KEY (id));";
-			String databaseURL = "~/data/demo;"; // "testdb" //Esse segundo o banco será executado somente na memória
-			Connection conn = DriverManager
-					.getConnection(
-							"jdbc:h2:file:" + databaseURL + "INIT=" + createTable,
-							"admin", "admin");
+			String databaseURL = "file:~/data/demo;"; // "mem:testdb";
+      			Connection conn = DriverManager.getConnection(
+              			"jdbc:h2:" + databaseURL + "INIT=" + createTable,
+              			"admin", "admin");
 
 			Banco b = new Banco(conn);
 			b.printData();
