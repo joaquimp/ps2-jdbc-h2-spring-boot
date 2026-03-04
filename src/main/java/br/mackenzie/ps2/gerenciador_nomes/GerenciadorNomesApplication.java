@@ -2,9 +2,6 @@ package br.mackenzie.ps2.gerenciador_nomes;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.Scanner;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,15 +17,15 @@ public class GerenciadorNomesApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) {
 		try {
-			System.out.println("EXECUTING : command line runner");
-			String createTable = "CREATE TABLE IF NOT EXISTS countries(id INT, name VARCHAR(256),PRIMARY KEY (id));";
-			String databaseURL = "file:~/data/demo;"; // "mem:testdb";
-      			Connection conn = DriverManager.getConnection(
-              			"jdbc:h2:" + databaseURL + "INIT=" + createTable,
-              			"admin", "admin");
-
-			Banco b = new Banco(conn);
-			b.printData();
+			String createTable = "CREATE TABLE IF NOT EXISTS nomes(nome VARCHAR(256) NOT NULL UNIQUE);";
+			String databaseURL = "file:./data/banco_dados;";
+			try (Connection conn = DriverManager.getConnection(
+					"jdbc:h2:" + databaseURL + "INIT=" + createTable,
+					"admin", "admin")) {
+				GerenciadorNomes gerenciadorNomes = new GerenciadoNomesBD(conn);
+				Ihm ihm = new Ihm(gerenciadorNomes);
+				ihm.dialogar();
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
