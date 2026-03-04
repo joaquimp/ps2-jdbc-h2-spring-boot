@@ -15,27 +15,36 @@ public class GerenciadoNomesBD implements GerenciadorNomes {
     }
 
     @Override
-    public List<String> obter() throws SQLException {
-        String sql = "SELECT nome FROM nomes ORDER BY nome";
+    public List<String> obter() {
+        String sql = "SELECT * FROM nomes ORDER BY nome";
         List<String> nomes = new ArrayList<>();
 
-        try (PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            
             while (resultSet.next()) {
                 nomes.add(resultSet.getString("nome"));
             }
+        } catch (Exception e) {
+            System.out.println("Erro ao obter nomes " + e);
+            return new ArrayList<>();
         }
 
         return nomes;
     }
 
     @Override
-    public void adicionar(String nome) throws SQLException {
+    public void adicionar(String nome) {
         String sql = "INSERT INTO nomes (nome) VALUES (?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, nome);
             statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Erro ao obter nomes " + e);
+            return new ArrayList<>();
         }
     }
 }

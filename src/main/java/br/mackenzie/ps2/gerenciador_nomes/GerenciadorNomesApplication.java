@@ -19,13 +19,16 @@ public class GerenciadorNomesApplication implements CommandLineRunner {
 		try {
 			String createTable = "CREATE TABLE IF NOT EXISTS nomes(nome VARCHAR(256) NOT NULL UNIQUE);";
 			String databaseURL = "file:./data/banco_dados;";
-			try (Connection conn = DriverManager.getConnection(
+			try {
+				Connection conn = DriverManager.getConnection(
 					"jdbc:h2:" + databaseURL + "INIT=" + createTable,
-					"admin", "admin")) {
-				GerenciadorNomes gerenciadorNomes = new GerenciadoNomesBD(conn);
+					"admin", "admin");
+				GerenciadorNomes gerenciadorNomes = new GerenciadoNomesMen(conn);
 				Ihm ihm = new Ihm(gerenciadorNomes);
 				ihm.dialogar();
-			}
+			} catch(Exception e) {
+				e.printStackTrace();
+			} 
 
 		} catch (Exception e) {
 			e.printStackTrace();

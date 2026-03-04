@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface GerenciadorNomes {
-    List<String> obter() throws SQLException;
-
-    void adicionar(String nome) throws SQLException;
+    List<String> obter();
+    void adicionar(String nome);
 }
