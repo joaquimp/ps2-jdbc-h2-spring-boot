@@ -3,14 +3,13 @@ package br.mackenzie.ps2.gerenciador_nomes;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GerenciadoNomesBD implements GerenciadorNomes {
+public class GerenciadorNomesBD implements GerenciadorNomes {
     private final Connection connection;
 
-    public GerenciadoNomesBD(Connection connection) {
+    public GerenciadorNomesBD(Connection connection) {
         this.connection = connection;
     }
 
@@ -35,16 +34,44 @@ public class GerenciadoNomesBD implements GerenciadorNomes {
     }
 
     @Override
-    public void adicionar(String nome) {
+    public boolean adicionar(String nome) {
         String sql = "INSERT INTO nomes (nome) VALUES (?)";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, nome);
             statement.executeUpdate();
+            return true;
         } catch (Exception e) {
-            System.out.println("Erro ao obter nomes " + e);
-            return new ArrayList<>();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean remover(String nome) {
+        String sql = "DELETE FROM nomes WHERE nome = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, nome);
+            int qtd = stmt.executeUpdate();
+            return qtd > 0;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean atualizar(String nomeAntigo, String novoNome) {
+        String sql = "UPDATE nomes SET nome=? WHERE nome=?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(2, nomeAntigo);
+            stmt.setString(1, novoNome);
+            int qtd = stmt.executeUpdate();
+            return qtd > 0;
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
 }

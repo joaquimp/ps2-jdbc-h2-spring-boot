@@ -1,9 +1,10 @@
 package br.mackenzie.ps2.gerenciador_nomes;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface GerenciadorNomes {
     List<String> obter();
-    void adicionar(String nome);
+    boolean adicionar(String nome);
+    boolean remover(String nome);
+    boolean atualizar(String nomeAntigo, String novoNome);
 }
